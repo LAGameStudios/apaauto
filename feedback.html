@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Website Feedback</title>
+  <style>
+    body {
+      background-image: url("bg.png");
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333; /* Set a base text color for better contrast */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em; /* Increase heading size for emphasis */
+    }
+	
+    p {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em; /* Increase heading size for emphasis */
+    }
+
+    .feedback-form {
+	  align: center;
+      width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f5f5f5; /* Light background for the form */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold; /* Make labels stand out */
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    textarea {
+      height: 100px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #3e8e41;
+    }
+
+    #success_message {
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="color:white;">APA Auto Feedback</h1>
+  <p style="color:white;">We appreciate your feedback on our website. Please fill out the form below and let us know your thoughts.</p>
+  <div class="feedback-form">
+    <form action="https://formspree.io/f/mbjnnqag" method="POST">
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      <label for="email">Your Email:</label>
+      <input type="text" id="email" name="email" placeholder="Enter your email" required>
+      <label for="feedback">Your Feedback:</label>
+      <textarea id="feedback" name="feedback" placeholder="Write your feedback here" required></textarea>
+      <button type="submit">Submit Feedback</button>
+    </form>
+    <div id="success_message"></div>
+  </div>
+  <script>
+    const feedbackForm = document.getElementById("feedback_form");
+    const successMessageElement = document.getElementById("success_message");
+
+    feedbackForm.addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevents default form submission behavior
+
+      successMessageElement.textContent = "Thank you for your feedback!";
+    });
+  </script>
+</body>
+</html>

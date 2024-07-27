@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APA Auto - Interactive Citation Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-image: url('bg.png');
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header .logo h1 {
+            margin: 0;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #chatbox {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chatbox-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .user-message {
+            background: #e0f7fa;
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+
+        .bot-message {
+            background: #fff3e0;
+            text-align: left;
+        }
+
+        .message img {
+            border-radius: 50%;
+            margin: 0 10px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .message .name {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        #chatbox-form {
+            display: flex;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        #chatbox-form button {
+            padding: 10px 20px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>APA Auto</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div id="chatbox">
+                <div id="chatbox-messages"></div>
+                <form id="chatbox-form">
+                    <input type="text" id="user-input" placeholder="Type your message here..." required>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 APA Auto. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatboxForm = document.getElementById('chatbox-form');
+            const userInput = document.getElementById('user-input');
+            const chatboxMessages = document.getElementById('chatbox-messages');
+
+            const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+            const questions = [
+                "Who is the creator or author of the video?",
+                "What is the year of publication?",
+                "What is the title of the video?",
+                "What is the URL of the video?",
+                "What is the name of the channel?"
+            ];
+
+            let responses = [];
+            let currentQuestion = 0;
+
+            async function botReply(message, isHTML = false) {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot-message';
+                botMessage.innerHTML = `
+                    <img src="https://static.vecteezy.com/system/resources/previews/006/662/139/large_2x/artificial-intelligence-ai-processor-chip-icon-symbol-for-graphic-design-logo-web-site-social-media-mobile-app-ui-illustration-free-vector.jpg" alt="APA Auto">
+                    <div>
+                        <div class="name">APA Auto</div>
+                        <div class="text">...</div>
+                    </div>
+                `;
+                chatboxMessages.appendChild(botMessage);
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+
+                await delay(1000);
+
+                if (isHTML) {
+                    botMessage.querySelector('.text').innerHTML = message;
+                } else {
+                    botMessage.querySelector('.text').textContent = message;
+                }
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+            }
+
+            async function handleUserInput(message) {
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.innerHTML = `
+                    <img src="photo.png" alt="You">
+                    <div>
+                        <div class="name">You</div>
+                        <div class="text">${message}</div>
+                    </div>
+                `;
+                chatboxMessages.appendChild(userMessage);
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+
+                responses.push(message);
+                
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    await botReply(questions[currentQuestion]);
+                } else {
+                    await generateCitation();
+                }
+            }
+
+            async function generateCitation() {
+                const [author, year, title, url, channel] = responses;
+                const citation = `${author}. (${year}). ${title} [Video]. ${channel}. ${url}`;
+                await botReply(`Here is your APA citation: <strong>${citation}</strong>`, true);
+            }
+
+            chatboxForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const message = userInput.value.trim();
+                if (message) {
+                    userInput.value = '';
+                    await handleUserInput(message);
+                }
+            });
+
+            // Start the conversation
+            botReply(questions[currentQuestion]);
+        });
+    </script>
+</body>
+</html>

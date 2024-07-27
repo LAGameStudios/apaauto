@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>APA Auto Login</title>
+  <style>
+    body {
+      background-image: url("bg.png");
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 400px;
+      margin: 100px auto;
+      padding: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"], input[type="password"], button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3e8e41;
+    }
+
+    #error_message {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>APA Auto Login</h1>
+    <p>Enter username and password:</p>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="submit_button">Submit</button>
+    <div id="error_message"></div>
+  </div>
+  <script>
+    const usernameElement = document.getElementById("username");
+    const passwordElement = document.getElementById("password");
+    const submitButton = document.getElementById("submit_button");
+    const errorMessageElement = document.getElementById("error_message");
+
+    submitButton.addEventListener("click", function() {
+      const username = usernameElement.value;
+      const password = passwordElement.value;
+
+      // Hardcoded credentials (INSECURE!)
+      const correctUsername = "AdminPass";
+      const correctPassword = "AdMiNgPaSs1919!";
+
+      if (username === correctUsername && password === correctPassword) {
+        // Login successful! Redirect to confirmation page
+        window.location.href = "admin-confirm.html";
+      } else {
+        errorMessageElement.textContent = "Invalid Username or Password!";
+      }
+    });
+  </script>
+</body>
+</html>
